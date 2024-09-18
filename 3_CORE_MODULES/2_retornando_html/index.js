@@ -15,4 +15,3 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
     console.log(`Servidor rodando na prota ${port}`);
 });
-

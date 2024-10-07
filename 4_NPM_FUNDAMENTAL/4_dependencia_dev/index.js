@@ -19,3 +19,7 @@ console.log(chalk.bgRed.bold(diff));
 //que vi fazer a atulização de todos os pacotes instalados no package.json
 //é possível atualizar um pacote específico com 'npm update <nome>'
 //para checar se existe novas versões se o npm update n funcionar 'npx npm-check-updates -u'
+
+//É possível criar rotinas com o npm também
+//utilizamos npm run <script>
+//no package.json em 'script' adicione o 'start': '<script>'

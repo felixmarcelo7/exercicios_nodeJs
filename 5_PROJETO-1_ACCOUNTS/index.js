@@ -29,7 +29,7 @@ function operation() {
       if(action === "Criar Conta") {
         createAccount();
       } else if(action === "Consultar Saldo") {
-        
+        getAccountBalance();
       } else if(action === "Depositar") {
         deposit();
       } else if(action === "Sacar") {
@@ -70,7 +70,7 @@ const bildAccount = () => {
     }
 
     //cria um .json com os dados da conta
-    fs.writeFileSync(`accounts/${accountName}.json`, '{"balence": 0}', (err) => console.log(err));
+    fs.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}', (err) => console.log(err));
 
     console.log(chalk.green("Parabéns a sua conta foi criada!!!"));
     operation();
@@ -92,6 +92,20 @@ const deposit = () => {
       return deposit();
     }
 
+    inquirer.prompt([
+      {
+        name: "amount",
+        message: "Quanto você quer depositar? R$",
+      },
+    ]).then((answer) => {
+      const amount = answer["amount"];
+
+      //add an amount
+      addAmount(accountName, amount);
+      operation();
+
+    }).catch(err => console.log(err));
+
 
   }).catch(err => console.log(err));
 }
@@ -103,4 +117,57 @@ const checkAccount = (accountName) => {
     return false;
   }
   return true;
+}
+
+const addAmount = (accountName, amount) => {
+  const accountData = getAccount(accountName);
+
+  if(!amount) {
+    console.log(chalk.bgRed.black("Ocorreu um erro, valor não digitado. Tente novamente!"));
+    return;
+  }
+
+  accountData.balance = parseFloat(amount) + parseFloat(accountData.balance);
+
+  fs.writeFileSync(`accounts/${accountName}.json`,
+    JSON.stringify(accountData),
+    (err) => console.log(err)
+  );
+
+  console.log(chalk.green(`Foi depositado R$${amount} na sua conta.`))
+}
+
+const getAccount = (accountName) => { //pega o arquivo json em formato de texto
+  const accountJSON = fs.readFileSync(`accounts/${accountName}.json`, {
+    encoding: "utf8",
+    flag: "r",
+  })
+
+  return JSON.parse(accountJSON); //converte para um arquivo json
+}
+
+const getAccountBalance = () => {
+  inquirer.prompt([
+    {
+      name: "accountName",
+      message: "Qual o nome da sua conta? ",
+    },
+  ])
+  .then(answer => {
+    const accountName = answer["accountName"];
+
+    //verife account exists
+    if(!checkAccount(accountName)) {
+      return getAccountBalance();
+    }
+
+    const accountData = getAccount(accountName);
+
+    console.log(chalk.bgBlue.black(
+      `Olá, o saldo da sua conta é de R$${(accountData.balance).toFixed(2)}`)
+    );
+    operation();
+  })
+  .catch(err => console.log(err))
+
 }

@@ -17,6 +17,7 @@ function operation() {
         choices: [
           "Criar Conta",
           "Consultar Saldo",
+          "Transferir",
           "Depositar",
           "Sacar",
           "Sair",
@@ -30,6 +31,8 @@ function operation() {
         createAccount();
       } else if (action === "Consultar Saldo") {
         getAccountBalance();
+      } else if (action === "Transferir") {
+        transfer();
       } else if (action === "Depositar") {
         deposit();
       } else if (action === "Sacar") {
@@ -244,6 +247,112 @@ const removeAmount = (accountName, amount) => {
     (err) => console.log(err)
   );
 
-  console.log(chalk.bgBlue.black(`Foi sacado R$${amount} da dua conta.`));
+  console.log(chalk.bgBlue.black(`Foi sacado R$${amount} da sua conta.`));
   operation();
+};
+
+const transfer = () => {
+  inquirer
+    .prompt([
+      {
+        name: "accountNameRem",
+        message: "De qual conta deseja tranferir?",
+      },
+    ])
+    .then((answer) => {
+      const accountNameRem = answer["accountNameRem"];
+
+      if (!checkAccount(accountNameRem)) {
+        return transfer();
+      }
+
+      inquirer
+        .prompt([
+          {
+            name: "accountNameAdd",
+            message: "Para qual conta será feita a tranferência?",
+          },
+        ])
+        .then((answer) => {
+          const accountNameAdd = answer["accountNameAdd"];
+
+          if (!checkAccount(accountNameAdd)) {
+            return transfer();
+          }
+
+          inquirer
+            .prompt([
+              {
+                name: "amount",
+                message: "Qual o valor deseja transferir? R$",
+              },
+            ])
+            .then((answer) => {
+              const amount = answer["amount"];
+              const accountDataRem = getAccount(accountNameRem);
+              const accountDataAdd = getAccount(accountNameAdd);
+
+              if (!amount) {
+                console.log(
+                  chalk.bgRed.black(
+                    "Ocorreu um erro, valor não digitado. Tente novamente!"
+                  )
+                );
+                return transfer();
+              }
+
+              if (amount > accountDataRem.balance) {
+                console.log(
+                  chalk.bgRed.black("Valor indisponível para essa conta!!!")
+                );
+                return transfer();
+              }
+
+              inquirer
+                .prompt([
+                  {
+                    type: "confirm",
+                    name: "option",
+                    message: `Será tranferido R$${amount} para a conta ${accountNameAdd}?`,
+                  },
+                ])
+                .then((answer) => {
+                  const option = answer["option"];
+
+                  if (!option) {
+                    console.log(chalk.bgRed.black("Transferência negada!!!"));
+                    return operation();
+                  }
+
+                  accountDataRem.balance =
+                    parseFloat(accountDataRem.balance) - parseFloat(amount);
+                  accountDataAdd.balance =
+                    parseFloat(accountDataAdd.balance) + parseFloat(amount);
+
+                  fs.writeFileSync(
+                    `accounts/${accountNameRem}.json`,
+                    JSON.stringify(accountDataRem),
+                    (err) => console.log(err)
+                  );
+
+                  fs.writeFileSync(
+                    `accounts/${accountNameAdd}.json`,
+                    JSON.stringify(accountDataAdd),
+                    (err) => console.log(err)
+                  );
+
+                  console.log(
+                    chalk.bgBlue.black(
+                      `Foi tranferido R$${amount} da conta ${accountNameRem} para conta ${accountNameAdd}.`
+                    )
+                  );
+                  operation();
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };

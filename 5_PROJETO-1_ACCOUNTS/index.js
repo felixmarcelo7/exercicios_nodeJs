@@ -20,6 +20,7 @@ function operation() {
           "Transferir",
           "Depositar",
           "Sacar",
+          "Extrato",
           "Sair",
         ],
       },
@@ -37,6 +38,8 @@ function operation() {
         deposit();
       } else if (action === "Sacar") {
         withdraw();
+      } else if (action === "Extrato") {
+        showExtract();
       } else if (action === "Sair") {
         console.log(chalk.bgBlue.black("Obrigado por usar o Account!"));
         process.exit(); //para finalizar o progrma
@@ -79,7 +82,7 @@ const bildAccount = () => {
       //cria um .json com os dados da conta
       fs.writeFileSync(
         `accounts/${accountName}.json`,
-        '{"balance": 0}',
+        '{"balance": 0, "extract": []}',
         (err) => console.log(err)
       );
 
@@ -144,6 +147,8 @@ const addAmount = (accountName, amount) => {
   }
 
   accountData.balance = parseFloat(amount) + parseFloat(accountData.balance);
+  accountData.extract.push(parseFloat(amount));
+  AddDateAndTime(accountData);
 
   fs.writeFileSync(
     `accounts/${accountName}.json`,
@@ -240,6 +245,8 @@ const removeAmount = (accountName, amount) => {
   }
 
   accountData.balance = parseFloat(accountData.balance) - parseFloat(amount); //atualiza o JSON (com os valores da conta)
+  accountData.extract.push(parseFloat(amount) * -1);
+  AddDateAndTime(accountData);
 
   fs.writeFileSync(
     `accounts/${accountName}.json`, //salva a atualização
@@ -326,8 +333,13 @@ const transfer = () => {
 
                   accountDataRem.balance =
                     parseFloat(accountDataRem.balance) - parseFloat(amount);
+                  accountDataRem.extract.push(parseFloat(amount) * -1);
+                  AddDateAndTime(accountDataRem);
+
                   accountDataAdd.balance =
                     parseFloat(accountDataAdd.balance) + parseFloat(amount);
+                  accountDataAdd.extract.push(parseFloat(amount));
+                  AddDateAndTime(accountDataAdd);
 
                   fs.writeFileSync(
                     `accounts/${accountNameRem}.json`,
@@ -353,6 +365,74 @@ const transfer = () => {
             .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+};
+
+const AddDateAndTime = (accountData) => {
+  const date = new Date();
+  const [day, month, year, time] = [
+    date.getDate(),
+    date.getMonth() + 1,
+    date.getFullYear(),
+    date.toLocaleTimeString(),
+  ];
+
+  //Faz com que o lenght do array extract tenha apenas as 5 ultimas movimentações
+  if (accountData.extract.length > 10) {
+    accountData.extract.splice(0, 2);
+  }
+
+  return accountData.extract.push(
+    `${day}/${month}/${year} - ${time}`.toString()
+  );
+};
+
+const showExtract = () => {
+  inquirer
+    .prompt([
+      {
+        name: "accountName",
+        message: "De qual conta deseja ver o extrato? ",
+      },
+    ])
+    .then((answer) => {
+      const accountName = answer["accountName"];
+      const accountData = getAccount(accountName);
+      const accountExtract = accountData.extract;
+
+      //formata e mostra o extrato na tela
+      let extract = "";
+      accountExtract.forEach((item, i) => {
+        let negativo = false;
+        if (i % 2 == 0) {
+          if (item < 0) {
+            negativo = true;
+          }
+          extract =
+            extract +
+            `${!negativo ? "" : "-"}R$${Math.abs(item)
+              .toFixed(2)
+              .toString()
+              .padEnd(20, ".")} `;
+        } else {
+          extract = extract + `${item}\n`;
+        }
+      });
+
+      console.log(
+        `${"EXTRATO".padStart(25)}\n${"Últimas 5 movimentações".padStart(
+          33
+        )}\n${"-".repeat(50)}`
+      );
+      console.log(extract);
+      console.log("-".repeat(50));
+      console.log(
+        chalk.bgBlue.black(`Saldo: R$${accountData.balance.toFixed(2)}`)
+      );
+      console.log("-".repeat(50));
+
+      operation();
     })
     .catch((err) => console.log(err));
 };

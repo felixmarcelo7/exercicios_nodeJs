@@ -1,0 +1,7 @@
+//O que são rotas?
+//Rota é um conceito super importante e presente em aplicações web
+//basicamente são URL's que acessamos
+//Se criarmos uma rota /produtos, podemos acessar atráves da URL www.nossosite.com/produtos
+//Quando o usuário acessa podemos acessar várias lógicas, como carregar produtos do banco de dados
+//ou seja, rotas são uma ponte entre o usuário e a lógica da aplicação
+

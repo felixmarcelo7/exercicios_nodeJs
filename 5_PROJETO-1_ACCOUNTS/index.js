@@ -384,7 +384,7 @@ const AddDateAndTime = (accountData) => {
   }
 
   return accountData.extract.push(
-    `${day}/${month}/${year} - ${time}`.toString()
+    `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month}/${year} - ${time}`.toString()
   );
 };
 

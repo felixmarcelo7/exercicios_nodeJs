@@ -1,0 +1,12 @@
+<h2>Veja nossos produtos</h2>
+<section class="cards">
+  {{#each products}}
+    <div class="card">
+      <div class="card-item">
+        <h3>{{this.title}}</h3>
+        <p>R${{this.price}}</p>
+        <a href="/product/{{this.id}}">Acesse o produto</a>
+      </div>
+    </div>
+  {{/each}}
+</section>

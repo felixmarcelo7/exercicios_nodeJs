@@ -32,10 +32,13 @@ nav a {
   color: white;
 }
 .cards {
-  display: flex;
+  display: grid;
   justify-content: center;
-  gap: 2rem;
   margin-top: 2rem;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto auto; 
+  column-gap: 15px;
+  row-gap: 15px;
 }
 
 .card {
@@ -73,4 +76,27 @@ nav a {
   background-color: rgb(190, 211, 255);
   border-radius: 10px;
   padding: 15px 10px 15px 10px;
+}
+
+.addCard {
+  text-align: center;
+  background-color: rgb(190, 211, 255);
+  border-radius: 10px;
+  font-size: .8rem;
+}
+
+.addCard-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 10px;
+  gap: 13px;
+}
+
+#add {
+  text-decoration: none;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
 }

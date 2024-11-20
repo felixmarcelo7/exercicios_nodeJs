@@ -36,8 +36,6 @@ app.get("/product/:id", (req, res) => {
 app.post("/", (req, res) => {
   req.body.id = products.length + 1;
   products.push(req.body);
-
-  res.render("home", { products });
 });
 
 app.get("/", (req, res) => {

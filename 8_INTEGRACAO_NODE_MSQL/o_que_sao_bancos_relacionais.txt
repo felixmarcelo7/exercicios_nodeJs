@@ -1,0 +1,24 @@
+O que são bancos de dados relacionais?
+
+Os bancos de dados relacionais são constituídos por algumas entidades;
+BANCOS DE DADOS: Um banco para guardar os dados de um projeto;
+TABELA: Onde categorizamos os dados e os inserimos;
+COLUNAS: Onde separamos os dados em uma tabela;
+DADOS: O que é inserido, modificado, atualizado e removido em uma tabela
+RELACIONAMENTO: Ligações entre tabelas;
+
+O que é o MYSQL?
+
+** O MySQL é SGBD (Sistema Gerenciador de Banco de dados), que vai nos ajudar
+a trabalhar com bancos relacionais
+** Támbem é o mais utilizado atualmente em sistemas e aplicações
+** Muitos projetos de Node.js utilizam MySQL
+** Precisamos instalar o software e deixar ele em execução para que o Node
+possa se conectar aos bancos que temos disponíveis.
+
+INTEGRAÇÃO DO MYSQL E NODE.js
+
+** Primeiramente precisamos instalar o driver, que é um pacote chamado mysql;
+** Vamos intalá-lo com o npm;
+** Depois precisamos conectar nosso banco de dados;
+** Vamos inserir informações como: host, user, password e o banco;

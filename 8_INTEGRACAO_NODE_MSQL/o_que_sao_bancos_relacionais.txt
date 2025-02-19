@@ -22,3 +22,10 @@ INTEGRAÇÃO DO MYSQL E NODE.js
 ** Vamos intalá-lo com o npm;
 ** Depois precisamos conectar nosso banco de dados;
 ** Vamos inserir informações como: host, user, password e o banco;
+
+CRIANDO A NOSSA TABELA -aula 124
+
+** Para manipular os dados do sistema vamos precisar criar uma tabela;
+** Faremos isso via Workbench, criando uma tabela chamada books, onde vamos
+cadastrat livros;
+** Estes livros vão precisar de duas informações: título e páginas;

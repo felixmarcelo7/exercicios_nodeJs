@@ -1,0 +1,6 @@
+INSERINDO DADOS NO BANCO
+
+** Para inserir dados no banco vamos precisar criar e executar uma query;
+** A query em si é uma string, segindo os padrões do MySQL;
+** Já para executar vamos utilizar o método query do pacote mysql;
+** E nessa aula faremos o uso da instrução INSERT, que insere dados;

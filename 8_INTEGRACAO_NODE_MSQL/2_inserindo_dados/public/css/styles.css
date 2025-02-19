@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: helvetica;
+}
+
+h1 {
+  text-align: center;
+  margin: 0.5em;
+}
+
+.form {
+    width: 450px;
+    margin: 0 auto;
+
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: .5em;
+}
+
+label {
+    font-weight: bold;
+    padding-bottom: .3em;
+}
+
+input {
+    padding: 5px;
+}

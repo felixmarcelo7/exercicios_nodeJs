@@ -1,0 +1,5 @@
+RESGATANDO DADOS
+
+** Para resgatar dados vamos pecisar de uma query, que será um SELECT;
+** Podemos escolher quais dados serão retornados, determinando as colunas
+e podemos imprimi-los nas nossas views
